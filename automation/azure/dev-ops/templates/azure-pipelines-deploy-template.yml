@@ -1,0 +1,39 @@
+parameters:
+  # unique name of the job
+  job_name: deploy_report
+  # friendly name of the job
+  display_name: Upload Accessibility Report to SharePoint Site
+  # name of target environment deploying to
+  target_environment: ''
+  variable_group_name: ''
+jobs:
+  - deployment: ${{ parameters.job_name }}
+    displayName: ${{ parameters.display_name }}
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: ${{ parameters.target_environment }}
+    variables:
+      - group: ${{ parameters.variable_group_name }} # m365_client_id, m365_user_login, m365_user_password, m365_site_url, m365_reports_folder
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: sudo npm install --global @pnp/cli-microsoft365
+              displayName: Install Microsoft Office365 CLI
+            - script: m365 login --authType password --userName $(m365_user_login) --password $(m365_user_password) --appId $(m365_client_id)
+              displayName: Login to Microsoft Office365
+            - script: m365 spo file add --path $(Pipeline.Workspace)/build.createWCAGreport/accessibility-report.json --webUrl $(m365_site_url) --folder '$(m365_reports_folder)'
+              displayName: Upload Accessibility Report to SharePoint Site
+            - script: m365 logout
+              displayName: Logout from Microsoft Office365
+            - checkout: senacor-screenshots
+              persistCredentials: 'true'
+            - script: |
+                git config user.email "petr.andr66v@gmail.com"
+                git config user.name "Pёtr Andreev"
+                ls -al
+                ls -al screenshots
+                git add screenshots/*
+                git commit -m "feat(add-screenshots): added screenshot after scraping $(URL)"
+                git push origin HEAD:feat/screenshots
+              displayName: 'Check-in screenshot'
