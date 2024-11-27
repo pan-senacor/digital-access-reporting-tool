@@ -29,3 +29,5 @@ jobs:
         displayName: 'Generate report'
       - publish: '$(System.DefaultWorkingDirectory)/.accessibility-checker/accessibility-report.json'
         displayName: 'Publish Accessibility Report to Pipeline'
+      - publish: '$(System.DefaultWorkingDirectory)/screenshots
+        displayName: 'Publish Screenshots to Pipeline'
