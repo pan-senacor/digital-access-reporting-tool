@@ -27,7 +27,9 @@ jobs:
         displayName: 'Install Playwright browsers'
       - script: npm run gen
         displayName: 'Generate report'
-      - publish: '$(System.DefaultWorkingDirectory)/.accessibility-checker/accessibility-report.json'
-        displayName: 'Publish Accessibility Report to Pipeline'
-      - publish: '$(System.DefaultWorkingDirectory)/screenshots
-        displayName: 'Publish Screenshots to Pipeline'
+      - publish: $(System.DefaultWorkingDirectory)/.accessibility-checker/accessibility-report.json
+        artifact: reports
+        displayName: 'Publish Reports to the Pipeline'
+      - publish: $(System.DefaultWorkingDirectory)/screenshots
+        artifact: screenshots
+        displayName: 'Publish Screenshots to the Pipeline'
