@@ -5,19 +5,18 @@ resources:
     - repository: senacor-main
       type: github
       endpoint: senacor
-      ref: 'refs/heads/test/add-2-pipeline'
+      ref: test/add-2-pipeline
       name: senacor/digital-access-reporting-tool
     - repository: senacor-screenshots
       type: github
-      endpoint: senacor
-      ref: 'refs/heads/feat/screenshots'
-      name: senacor/digital-access-reporting-tool
+      endpoint: pan-senacor
+      ref: feature/screenshots
+      name: pan-senacor/digital-access-reporting-tool
 
 trigger:
   branches:
     include:
       - main
-      - master
 
 stages:
   - stage: build
